@@ -91,3 +91,10 @@ def echo_server(port):
 # If this script is run directly, start the server
 if __name__ == '__main__':
     echo_server(9900)
+
+# References
+# GeeksforGeeks. (n.d.). Serializing JSON data in Python. Retrieved from Serializing JSON data in Python - GeeksforGeeks
+# Real Python. (n.d.). Socket Programming in Python (Guide). Retrieved from Socket Programming in Python (Guide) – Real Python
+# Real Python. (n.d.). Working With JSON Data in Python. Retrieved from Working With JSON Data in Python – Real Python
+
+
