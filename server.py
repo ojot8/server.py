@@ -68,7 +68,7 @@ def echo_server(port):
         print("Waiting to receive message from client")
         client, address = sock.accept()
         data = client.recv(data_payload)
-        print("Message Received form client: ",data)
+        print("Message Received from client: ",data)
 
         if data:
             data = data.decode("utf-8").split(" ")
