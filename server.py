@@ -8,11 +8,11 @@ data_payload = 2048
 backlog = 5
 
 fun_runs = [
-    {"Area": "Covuni", "Run Name": "Engineering Marathon", "Distance": "7 KM", "Time": "Fast", "Price Per Runner": 10, "Run Number": "001", "Available Spaces": 50},
-    {"Area": "Coventry", "Run Name": "Uni Fun Run", "Distance": "10 KM", "Time": "Slow", "Price Per Runner": 5, "Run Number": "002", "Available Spaces": 50},
-    {"Area": "WestMidlands", "Run Name": "Combe Abbey Swan Challenge", "Distance": "10 KM", "Time": "Medium", "Price Per Runner": 20, "Run Number": "003", "Available Spaces": 50},
-    {"Area": "NorthEast", "Run Name": "Pier to Pier", "Distance": "22 KM", "Time": "Fast", "Price Per Runner": 25, "Run Number": "004", "Available Spaces": 50},
-    {"Area": "York", "Run Name": "York 10KM", "Distance": "5 KM", "Time": "Very Fast", "Price Per Runner": 30, "Run Number": "005", "Available Spaces": 50},
+    {"Area": "Covuni", "Run Name": "Engineering Marathon", "Distance": "7 KM", "Time": "Fast", "Price Per Runner": 10, "Run ID": "001", "Available Spaces": 50},
+    {"Area": "Coventry", "Run Name": "Uni Fun Run", "Distance": "10 KM", "Time": "Slow", "Price Per Runner": 5, "Run ID": "002", "Available Spaces": 50},
+    {"Area": "WestMidlands", "Run Name": "Combe Abbey Swan Challenge", "Distance": "10 KM", "Time": "Medium", "Price Per Runner": 20, "Run ID": "003", "Available Spaces": 50},
+    {"Area": "NorthEast", "Run Name": "Pier to Pier", "Distance": "22 KM", "Time": "Fast", "Price Per Runner": 25, "Run ID": "004", "Available Spaces": 50},
+    {"Area": "York", "Run Name": "York 10KM", "Distance": "5 KM", "Time": "Very Fast", "Price Per Runner": 30, "Run ID": "005", "Available Spaces": 50},
 
 ]
 
@@ -33,13 +33,13 @@ def recommend_runs(*args):
 
 
 # This function registers runners for a run and handles errors, waiting list, discounts, and restrictions on the number of runners
-def register_runners(secretary_name, run_number, quantity):
+def register_runners(secretary_name, run_ID, quantity):
     max_runner = 25
 
     if quantity > max_runner:
         return "Cannot register more than {} runners at once.".format(max_runner)
 
-    run = next((run for run in fun_runs if run["Run Number"] == run_number), None)
+    run = next((run for run in fun_runs if run["Run ID"] == run_ID), None)
 
     if run is None:
         return "Run not found."
@@ -54,7 +54,7 @@ def register_runners(secretary_name, run_number, quantity):
         registered = run["Available Spaces"]
         run["Available Spaces"] = 0
         waiting = quantity - registered
-        waiting_list.append({"Secretary Name": secretary_name, "Run Number": run_number, "Quantity": waiting})
+        waiting_list.append({"Secretary Name": secretary_name, "Run ID": run_ID, "Quantity": waiting})
         return "{} runners registered for {} by {}. {} runners added to the waiting list.".format(registered, run['Run Name'], secretary_name, waiting)
 
 # This function handles the server-side operations
@@ -78,8 +78,8 @@ def echo_server(port):
                 recommended_runs = recommend_runs(*data[1:])
                 response = json.dumps(recommended_runs)
             elif command == "register":
-                secretary_name, run_number, quantity = data[1:]
-                response = register_runners(secretary_name, run_number, int(quantity))
+                secretary_name, run_ID, quantity = data[1:]
+                response = register_runners(secretary_name, run_ID, int(quantity))
             else:
                 response = "Invalid command."
 
@@ -91,6 +91,7 @@ def echo_server(port):
 # If this script is run directly, start the server
 if __name__ == '__main__':
     echo_server(9900)
+
 
 # References
 # GeeksforGeeks. (n.d.). Serializing JSON data in Python. Retrieved from Serializing JSON data in Python - GeeksforGeeks
