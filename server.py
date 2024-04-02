@@ -71,18 +71,22 @@ def echo_server(port):
         print("Waiting to receive message from client")
         client, address = sock.accept()
         data = client.recv(data_payload)
-        print("Message Received from client: ",data)
+        print("Message Received form client: ",data)
 
         if data:
             data = data.decode("utf-8").split(" ")
             command = data[0]
 
-            if command == "recommend":
+            if command == "exit":
+                print("Exit command received. Closing connection and exiting.")
+                client.close()
+                break
+            elif command == "recommend":
                 recommended_runs = recommend_runs(*data[1:])
                 response = json.dumps(recommended_runs)
             elif command == "register":
-                secretary_name, run_ID, quantity = data[1:]
-                response = register_runners(secretary_name, run_ID, int(quantity))
+                secretary_name, run_number, quantity = data[1:]
+                response = register_runners(secretary_name, run_number, int(quantity))
             else:
                 response = "Invalid command."
 
